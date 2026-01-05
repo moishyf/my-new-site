@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מערכת אבחון קריאה</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">קריאה+</div>
+      <div>
+        <h1>מערכת אבחון קריאה</h1>
+        <p class="subtitle">הדבקת טקסט + הקלטה → דו״ח אבחון ותוכנית עבודה</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>1) פרטי מטלה</h2>
+
+      <div class="grid">
+        <label class="field">
+          <span>כיתה (אופציונלי)</span>
+          <input id="grade" type="text" placeholder="למשל: ג׳" />
+        </label>
+
+        <label class="field">
+          <span>גיל (אופציונלי)</span>
+          <input id="age" type="number" min="3" max="20" placeholder="למשל: 9" />
+        </label>
+
+        <label class="field">
+          <span>טקסט מנוקד/לא מנוקד</span>
+          <select id="textMode">
+            <option value="pointed" selected>מנוקד</option>
+            <option value="unpointed">לא מנוקד</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>הברה/מבטא (אופציונלי)</span>
+          <select id="dialect">
+            <option value="" selected>לא צוין</option>
+            <option value="litai">ליטאי</option>
+            <option value="chasidish">חסידי</option>
+            <option value="edot">עדות המזרח</option>
+            <option value="modern">עברית ישראלית כללית</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="field">
+        <span>הטקסט שהילד אמור להקריא</span>
+        <textarea id="targetText" rows="7" placeholder="הדבק כאן טקסט (רצוי מנוקד אם זה מנוקד)"></textarea>
+        <small class="hint">טיפ: שמור על אותו טקסט בדיוק שהילד קרא בפועל.</small>
+      </label>
+
+      <label class="field">
+        <span>הערות מורה (אופציונלי)</span>
+        <textarea id="teacherNotes" rows="3" placeholder="למשל: התאמצות גבוהה, היסוסים, קושי בשוואים..."></textarea>
+      </label>
+    </section>
+
+    <section class="card">
+      <h2>2) הקלטת הקריאה</h2>
+
+      <div class="audioBox">
+        <div class="audioControls">
+          <button id="btnRecord" class="btn primary">התחל הקלטה</button>
+          <button id="btnStop" class="btn" disabled>עצור</button>
+          <label class="btn ghost fileBtn">
+            העלאת קובץ שמע
+            <input id="audioFile" type="file" accept="audio/*" hidden />
+          </label>
+        </div>
+
+        <div class="audioMeta" id="audioMeta">
+          <span class="pill">אין קובץ שמע עדיין</span>
+        </div>
+
+        <audio id="audioPlayer" controls class="audioPlayer" style="display:none;"></audio>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>3) הגדרות שליחה</h2>
+
+      <div class="grid">
+        <label class="field">
+          <span>מודל (אפשר לשנות)</span>
+          <input id="modelName" type="text" value="gemini-3-flash-preview" />
+        </label>
+
+        <label class="field">
+          <span>Proxy URL (מומלץ בפרודקשן)</span>
+          <input id="proxyUrl" type="text" placeholder="למשל: https://your-worker.yourdomain.workers.dev" />
+          <small class="hint">אם ריק — הקוד ינסה קריאה ישירה בעזרת API Key.</small>
+        </label>
+
+        <label class="field">
+          <span>Gemini API Key (לא מומלץ בצד לקוח)</span>
+          <input id="apiKey" type="password" placeholder="AI... (רק לפיתוח)" />
+          <small class="hint">בפרודקשן: להשאיר ריק ולהשתמש ב-Proxy.</small>
+        </label>
+
+        <label class="field">
+          <span>טמפרטורה</span>
+          <input id="temperature" type="number" min="0" max="1" step="0.1" value="0.2" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="btnAnalyze" class="btn primary big">צור דו״ח אבחון</button>
+        <button id="btnClear" class="btn big">נקה</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </section>
+
+    <section class="card reportCard">
+      <div class="reportHeader">
+        <h2>דו״ח</h2>
+        <div class="reportBadges" id="reportBadges"></div>
+      </div>
+      <div id="report" class="report">
+        <div class="empty">
+          עדיין אין דו״ח. תן לילד להקריא – ונראה מה הוא עושה עם השוואים 😉
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© קריאה+ | גרסת POC משודרגת</span>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
